@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Http\ViewComposers\NavigationComposer;
 
 class ComposerServiceProvider extends ServiceProvider
 {
@@ -14,7 +15,7 @@ class ComposerServiceProvider extends ServiceProvider
     public function boot()
     {
         // Sets the view that this composer will be interacting with.
-        view()->composer('layouts.partials._nav', \App\Http\ViewComposers\NavigationComposer::class);
+        view()->composer('layouts.partials._nav', NavigationComposer::class);
     }
 
     /**

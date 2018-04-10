@@ -7,6 +7,9 @@ use Illuminate\View\View;
 
 class NavigationComposer {
 
+    /**
+     * @param View $view
+     */
     public function compose(View $view) {
         // If a user isn't signed into the site
         if (!Auth::check())
