@@ -27,7 +27,7 @@
 
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="{{ url('/channel/' . $channel->slug) }}">Your Channel</a>
-                            <a class="dropdown-item" href="{{ url('/channel/' . $channel->slug . '/edit') }}">Channel Settings</a>
+                            <a class="dropdown-item" href="{{ url('/channel/' . $channel->slug . '/edit') }}">Settings</a>
                             <a class="dropdown-item" href="{{ route('logout') }}"
                                onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

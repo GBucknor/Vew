@@ -17,8 +17,20 @@ class Channel extends Model
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * Gets the slug of the channel.
+     * @return string
+     */
     public function getRouteKeyName()
     {
         return 'slug';
+    }
+
+    /**
+     * Specifies the cardinality between one channel and many videos.
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function videos() {
+        return $this->hasMany(Video::class);
     }
 }

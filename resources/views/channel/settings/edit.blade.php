@@ -16,7 +16,7 @@
 
                         <form action="/channel/{{ $channel->slug }}/edit" method="post" enctype="multipart/form-data">
                             <div class="form-group"{{ $errors->has('name' ? ' has error' : '') }}>
-                                <label for="name">Name</label>
+                                <label for="name">Username</label>
                                 <input id="name" type="text" class="form-control" name="name" value="{{ old('name') ? old('name') : $channel->name }}">
 
                                 @if ($errors->has('name'))
