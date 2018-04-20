@@ -40,10 +40,10 @@ class Video extends Model
 
     public function getThumbnail() {
         if (!$this->isProcessed()) {
-            return config('vew.buckets.videos/' . 'default.png');
+            return config('vew.buckets.videos') . '/default.png';
         }
 
-        return config('vew.buckets.videos/' . $this->video_id . '_1.jpg');
+        return config('vew.buckets.videos') . '/' . $this->video_id . '_1.jpg';
     }
 
     public function processedPercentage() {
