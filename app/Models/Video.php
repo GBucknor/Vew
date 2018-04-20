@@ -49,4 +49,12 @@ class Video extends Model
     public function processedPercentage() {
         return $this->processed_percent;
     }
+
+    public function likesAllowed() {
+        return (bool) $this->likes;
+    }
+
+    public function commentsAllowed() {
+        return (bool) $this->comments;
+    }
 }

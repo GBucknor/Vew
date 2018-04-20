@@ -10,6 +10,10 @@ class VideoPolicy
 {
     use HandlesAuthorization;
 
+    public function edit(User $user, Video $video) {
+        return $user->id === $video->channel->user_id;
+    }
+
     public function update(User $user, Video $video) {
         return $user->id === $video->channel->user_id;
     }

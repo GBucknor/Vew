@@ -27,12 +27,17 @@
                                             <a href="/videos/{{ $video->uid }}">{{ $video->title }}</a>
                                             <div class="row">
                                                 <div class="col-sm-6">
-                                                    @if(!$video->processed)
-                                                        Processing {{ $video->processedPercentage() ? $video->processedPercentage . '%' : 'Starting processing' }}
+                                                    <p class="text-muted">
+                                                        @if(!$video->processed)
+                                                            Processing {{ $video->processedPercentage() ? $video->processedPercentage . '%' : 'Starting processing' }}
 
-                                                    @else
-                                                        <span>Created at {{ $video->created_at->toDateTimeString() }}</span>
-                                                    @endif
+                                                        @else
+                                                            <span>Created at {{ $video->created_at->toDateTimeString() }}</span>
+                                                        @endif
+                                                    </p>
+                                                    <form action="" method="post">
+                                                        <a href="/videos/{{ $video->uid }}/edit" class="btn btn-outline-secondary">Edit video</a>
+                                                    </form>
                                                 </div>
                                                 <div class="col-sm-6">
                                                     <p>{{ ucfirst($video->access) }}</p>
@@ -42,6 +47,7 @@
                                     </div>
                                 </div>
                             @endforeach
+                            {{ $videos->links() }}
                             @else
                                 <p>You have no videos. Would you like to upload one? <a href="{{ url('/upload') }}">Upload</a></p>
                         @endif
