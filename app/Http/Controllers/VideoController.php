@@ -8,6 +8,13 @@ use Illuminate\Http\Request;
 
 class VideoController extends Controller
 {
+    public function index(Request $request) {
+        $videos = $request->user()->videos()->latestFirst()->get();
+        return view('video.index', [
+            'videos' => $videos,
+        ]);
+    }
+
     public function update(VideoUpdateRequest $request, Video $video) {
         $this->authorize('update', $video);
 

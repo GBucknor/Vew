@@ -29,4 +29,8 @@ class Video extends Model
     public function getRouteKeyName() {
         return 'uid';
     }
+
+    public function scopeLatestFirst($query) {
+        return $query->orderBy('created_at', 'desc');
+    }
 }
