@@ -8,7 +8,7 @@
 
 return [
     'buckets' => [
-        'videos' => 'https://s3.console.aws.amazon.com/s3/buckets/videos.vew.test',
-        'images' => 'https://s3.console.aws.amazon.com/s3/buckets/images.vew.test',
+        'videos' => 'https://s3-us-west-2.amazonaws.com/videos.vew.test',
+        'images' => 'https://s3-us-west-2.amazonaws.com/images.vew.test',
     ],
 ];
