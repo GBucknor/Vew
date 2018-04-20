@@ -33,4 +33,20 @@ class Video extends Model
     public function scopeLatestFirst($query) {
         return $query->orderBy('created_at', 'desc');
     }
+
+    public function isProcessed() {
+        return $this->processed;
+    }
+
+    public function getThumbnail() {
+        if (!$this->isProcessed()) {
+            return config('vew.buckets.videos' . 'default.png');
+        }
+
+        return config('vew.buckets.videos' . $this->video_id . '_1.jpg');
+    }
+
+    public function processedPercentage() {
+        return $this->processed_percent;
+    }
 }

@@ -19,13 +19,20 @@
                                 <div class="card">
                                     <div class="row">
                                         <div class="col-sm-3">
-                                            thumbnail
+                                            <a href="/videos/{{ $video->uid }}">
+                                                <img src="{{ $video->getThumbnail() }}" alt="{{ $video->title }} thumbnail" class="img-fluid">
+                                            </a>
                                         </div>
                                         <div class="col-sm-9">
                                             <a href="/videos/{{ $video->uid }}">{{ $video->title }}</a>
                                             <div class="row">
                                                 <div class="col-sm-6">
-                                                    data
+                                                    @if(!$video->processed)
+                                                        Processing {{ $video->processedPercentage() ? $video->processedPercentage . '%' : 'Starting processing' }}
+
+                                                    @else
+                                                        <span>Created at {{ $video->created_at->toDateTimeString() }}</span>
+                                                    @endif
                                                 </div>
                                                 <div class="col-sm-6">
                                                     <p>{{ ucfirst($video->access) }}</p>
