@@ -65,26 +65,32 @@
                 });
             },
             store() {
-                return this.$http.post('/videos', {
+                return axios.post('/videos', {
                     title: this.title,
                     description: this.description,
                     access: this.access,
                     extension: this.file.name.split('.').pop(),
                 }).then((response) => {
-                    this.uid = response.json().data.uid;
-                    console.log(this.uid);
+                    this.uid = response.data.data.uid;
+                }).catch((err) => {
+                    console.log(err);
                 });
             },
             update() {
                 this.saveStatus = 'Saving changes';
-                return this.$http.put('/videos/' + this.uid, {
+                return axios.put('/videos/' + this.uid, {
                     title: this.title,
                     description: this.description,
                     access: this.access,
                 }).then((response) => {
                     this.saveStatus = 'Changes saved';
+                    setTimeout(() => {
+                        this.saveStatus = null
+                    }, 4000)
                 }, () => {
                     this.saveStatus = 'Failed to save changes';
+                }).catch(err => {
+                    console.log(err);
                 });
             }
         },

@@ -2,13 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\VideoUpdateRequest;
 use App\Models\Video;
 use Illuminate\Http\Request;
 
 class VideoController extends Controller
 {
-    public function update(Request $request, Video $video) {
-        echo 'update';
+    public function update(VideoUpdateRequest $request, Video $video) {
+        $this->authorize('update', $video);
+
+        $video->update([
+           'title' => $request->title,
+           'description' => $request->description,
+           'access' => $request->access,
+            'likes' => $request->has('likes'),
+            'comments' => $request->has('comments'),
+        ]);
+
+        if ($request->ajax()) {
+            return response()->json(null, 200);
+        }
+
+        return redirect()->back();
     }
 
     public function store(Request $request) {
@@ -30,7 +45,7 @@ class VideoController extends Controller
 
         return response()->json([
            'data' => [
-               'uid' => $uid,
+               'uid' => $uid
            ]
         ]);
 
