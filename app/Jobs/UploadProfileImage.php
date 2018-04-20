@@ -40,7 +40,7 @@ class UploadProfileImage implements ShouldQueue
         $path = storage_path() . '/uploads/images/' . $this->fileId;
         $filename = $this->fileId . '.png';
         if (Storage::disk('s3images')->put('profile/' . $filename, fopen($path, 'r+'))) {
-            File::delete($path);
+            Storage::delete($path);
         }
 
         $this->channel->avatar_filename = $filename;

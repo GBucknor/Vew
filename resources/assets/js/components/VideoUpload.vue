@@ -3,12 +3,21 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card card-default">
-                    <div class="card-header">Upload</div>
+                    <div class="card-header">Upload a video</div>
 
                     <div class="card-body">
                         <input type="file" name="video" id="video" v-if="!uploading" @change="fileInputChange">
-
+                        <div class="alert alert-danger" v-if="failed">There was a problem during the file upload. Please refresh the page.</div>
                         <div id="v-form" v-if="uploading && !failed">
+                            <div class="progress" v-if="!uploadingComplete">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated" v-bind:style="{width: fileProgress + '%'}"></div>
+                            </div>
+                            <br/>
+                            <div class="alert alert-info" v-if="!uploadingComplete">
+                                Your video is now being uploaded. It will be available at <a :href="$root.url/'videos'/uid " target="_blank">{{$root.url}}/videos/{{ uid }}.</a>
+                            </div>
+                            <div class="alert alert-success" v-if="uploadingComplete">Video uploaded. It is now being processed. <a href="/videos">Go to video list.</a> </div>
+
                             <div class="form-group">
                                 <label for="video-title">Title</label>
                                 <input name="video-title" id="video-title" v-model="title" type="text" class="form-control">
@@ -49,7 +58,8 @@
                 uploading: false,
                 uploadingComplete: false,
                 failed: false,
-                saveStatus: null
+                saveStatus: null,
+                fileProgress: 0
             }
         },
         methods: {
@@ -61,7 +71,25 @@
                 this.file = document.getElementById('video').files[0];
                 // Stores metadata
                 this.store().then(() => {
-                    //
+                    let form = new FormData();
+                    form.append('video', this.file);
+                    form.append('uid', this.uid);
+                    axios.post('/upload', form, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        },
+                        onUploadProgress: (progressEvent) => {
+                            if (progressEvent.lengthComputable) {
+                                this.updateProgress(progressEvent);
+                            }
+                        }
+                    }).then( () => {
+                        this.uploadingComplete = true;
+                    }).catch(() => {
+                        this.failed = true;
+                    });
+                }).catch(() => {
+                    this.failed = true;
                 });
             },
             store() {
@@ -72,8 +100,6 @@
                     extension: this.file.name.split('.').pop(),
                 }).then((response) => {
                     this.uid = response.data.data.uid;
-                }).catch((err) => {
-                    console.log(err);
                 });
             },
             update() {
@@ -89,9 +115,11 @@
                     }, 4000)
                 }, () => {
                     this.saveStatus = 'Failed to save changes';
-                }).catch(err => {
-                    console.log(err);
                 });
+            },
+            updateProgress(e) {
+                e.percent = Math.round((e.loaded * 100) / e.total);
+                this.fileProgress = e.percent;
             }
         },
         mounted() {

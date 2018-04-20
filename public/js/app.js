@@ -13890,7 +13890,8 @@ window.Vue = __webpack_require__(36);
 
 Vue.component('video-upload', __webpack_require__(39));
 var app = new Vue({
-  el: '#app'
+  el: '#app',
+  data: window.vew
 });
 
 /***/ }),
@@ -47334,6 +47335,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -47345,12 +47355,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             uploading: false,
             uploadingComplete: false,
             failed: false,
-            saveStatus: null
+            saveStatus: null,
+            fileProgress: 0
         };
     },
 
     methods: {
         fileInputChange: function fileInputChange() {
+            var _this = this;
+
             // Starts the uploading process, but also indicates that the process
             // hasn't failed yet.
             this.uploading = true;
@@ -47358,11 +47371,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.file = document.getElementById('video').files[0];
             // Stores metadata
             this.store().then(function () {
-                //
+                var form = new FormData();
+                form.append('video', _this.file);
+                form.append('uid', _this.uid);
+                axios.post('/upload', form, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    },
+                    onUploadProgress: function onUploadProgress(progressEvent) {
+                        if (progressEvent.lengthComputable) {
+                            _this.updateProgress(progressEvent);
+                        }
+                    }
+                }).then(function () {
+                    _this.uploadingComplete = true;
+                }).catch(function () {
+                    _this.failed = true;
+                });
+            }).catch(function () {
+                _this.failed = true;
             });
         },
         store: function store() {
-            var _this = this;
+            var _this2 = this;
 
             return axios.post('/videos', {
                 title: this.title,
@@ -47370,13 +47401,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 access: this.access,
                 extension: this.file.name.split('.').pop()
             }).then(function (response) {
-                _this.uid = response.data.data.uid;
-            }).catch(function (err) {
-                console.log(err);
+                _this2.uid = response.data.data.uid;
             });
         },
         update: function update() {
-            var _this2 = this;
+            var _this3 = this;
 
             this.saveStatus = 'Saving changes';
             return axios.put('/videos/' + this.uid, {
@@ -47384,15 +47413,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 description: this.description,
                 access: this.access
             }).then(function (response) {
-                _this2.saveStatus = 'Changes saved';
+                _this3.saveStatus = 'Changes saved';
                 setTimeout(function () {
-                    _this2.saveStatus = null;
+                    _this3.saveStatus = null;
                 }, 4000);
             }, function () {
-                _this2.saveStatus = 'Failed to save changes';
-            }).catch(function (err) {
-                console.log(err);
+                _this3.saveStatus = 'Failed to save changes';
             });
+        },
+        updateProgress: function updateProgress(e) {
+            e.percent = Math.round(e.loaded * 100 / e.total);
+            this.fileProgress = e.percent;
         }
     },
     mounted: function mounted() {
@@ -47412,7 +47443,7 @@ var render = function() {
     _c("div", { staticClass: "row justify-content-center" }, [
       _c("div", { staticClass: "col-md-8" }, [
         _c("div", { staticClass: "card card-default" }, [
-          _c("div", { staticClass: "card-header" }, [_vm._v("Upload")]),
+          _c("div", { staticClass: "card-header" }, [_vm._v("Upload a video")]),
           _vm._v(" "),
           _c("div", { staticClass: "card-body" }, [
             !_vm.uploading
@@ -47422,8 +47453,62 @@ var render = function() {
                 })
               : _vm._e(),
             _vm._v(" "),
+            _vm.failed
+              ? _c("div", { staticClass: "alert alert-danger" }, [
+                  _vm._v(
+                    "There was a problem during the file upload. Please refresh the page."
+                  )
+                ])
+              : _vm._e(),
+            _vm._v(" "),
             _vm.uploading && !_vm.failed
               ? _c("div", { attrs: { id: "v-form" } }, [
+                  !_vm.uploadingComplete
+                    ? _c("div", { staticClass: "progress" }, [
+                        _c("div", {
+                          staticClass:
+                            "progress-bar progress-bar-striped progress-bar-animated",
+                          style: { width: _vm.fileProgress + "%" }
+                        })
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c("br"),
+                  _vm._v(" "),
+                  !_vm.uploadingComplete
+                    ? _c("div", { staticClass: "alert alert-info" }, [
+                        _vm._v(
+                          "\n                            Your video is now being uploaded. It will be available at "
+                        ),
+                        _c(
+                          "a",
+                          {
+                            attrs: {
+                              href: _vm.$root.url / "videos" / _vm.uid,
+                              target: "_blank"
+                            }
+                          },
+                          [
+                            _vm._v(
+                              _vm._s(_vm.$root.url) +
+                                "/videos/" +
+                                _vm._s(_vm.uid) +
+                                "."
+                            )
+                          ]
+                        )
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.uploadingComplete
+                    ? _c("div", { staticClass: "alert alert-success" }, [
+                        _vm._v("Video uploaded. It is now being processed. "),
+                        _c("a", { attrs: { href: "/videos" } }, [
+                          _vm._v("Go to video list.")
+                        ])
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
                   _c("div", { staticClass: "form-group" }, [
                     _c("label", { attrs: { for: "video-title" } }, [
                       _vm._v("Title")

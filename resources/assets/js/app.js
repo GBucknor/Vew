@@ -14,5 +14,6 @@ window.Vue = require('vue');
 
 Vue.component('video-upload', require('./components/VideoUpload.vue'));
 const app = new Vue({
-    el: '#app'
+    el: '#app',
+    data: window.vew
 });

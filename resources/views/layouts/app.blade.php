@@ -12,6 +12,15 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
+    <script>
+        window.vew = {
+            url: '{{ config('app.url') }}',
+            user: {
+                id: '{{ \Illuminate\Support\Facades\Auth::check() ? \Illuminate\Support\Facades\Auth::user()->id : null}}',
+                authenticated: '{{ \Illuminate\Support\Facades\Auth::check() ? 'true' : 'false'}}',
+            }
+        };
+    </script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
