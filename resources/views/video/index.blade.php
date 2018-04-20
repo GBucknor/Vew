@@ -35,8 +35,11 @@
                                                             <span>Created at {{ $video->created_at->toDateTimeString() }}</span>
                                                         @endif
                                                     </p>
-                                                    <form action="" method="post">
+                                                    <form action="/videos/{{ $video->uid }}" method="post">
                                                         <a href="/videos/{{ $video->uid }}/edit" class="btn btn-outline-secondary">Edit video</a>
+                                                        <button type="submit" class="btn btn-outline-danger">Delete</button>
+                                                        {{ csrf_field() }}
+                                                        {{ method_field('DELETE') }}
                                                     </form>
                                                 </div>
                                                 <div class="col-sm-6">
