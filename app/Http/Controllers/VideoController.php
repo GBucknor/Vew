@@ -4,14 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\VideoUpdateRequest;
 use App\Models\Video;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
 
 class VideoController extends Controller
 {
     public function index(Request $request) {
         $videos = $request->user()->videos()->latestFirst()->get();
         return view('video.index', [
-            'videos' => $videos,
+            'videos' => $this->paginate($videos),
         ]);
     }
 
@@ -70,5 +73,12 @@ class VideoController extends Controller
         $this->authorize('delete', $video);
         $video->delete();
         return redirect()->back();
+    }
+
+    public function paginate($items, $perPage = 15, $page = null, $options = [])
+    {
+        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+        $items = $items instanceof Collection ? $items : Collection::make($items);
+        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
     }
 }
