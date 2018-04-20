@@ -15,6 +15,14 @@ class VideoController extends Controller
         ]);
     }
 
+    public function edit(Video $video) {
+        $this->authorize('edit', $video);
+
+        return view('video.edit', [
+            'video' => $video,
+        ]);
+    }
+
     public function update(VideoUpdateRequest $request, Video $video) {
         $this->authorize('update', $video);
 
@@ -56,5 +64,11 @@ class VideoController extends Controller
            ]
         ]);
 
+    }
+
+    public function delete(Video $video) {
+        $this->authorize('delete', $video);
+        $video->delete();
+        return redirect()->back();
     }
 }
