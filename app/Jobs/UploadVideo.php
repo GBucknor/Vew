@@ -7,6 +7,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
 class UploadVideo implements ShouldQueue
@@ -34,7 +35,7 @@ class UploadVideo implements ShouldQueue
     {
         $file = storage_path() . '/uploads/' . $this->filename;
         if (Storage::disk('s3drop')->put($this->filename, fopen($file, 'r+'))) {
-            
+            File::delete($file);
         }
     }
 }

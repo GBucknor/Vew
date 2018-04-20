@@ -123,7 +123,11 @@
             }
         },
         mounted() {
-            //
+            window.onbeforeunload = () => {
+                if (this.uploading && !this.uploadingComplete && !this.failed) {
+                    return 'Are you sure you want to leave?';
+                }
+            }
         }
     }
 </script>

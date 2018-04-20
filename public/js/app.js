@@ -47427,7 +47427,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
     },
     mounted: function mounted() {
-        //
+        var _this4 = this;
+
+        window.onbeforeunload = function () {
+            if (_this4.uploading && !_this4.uploadingComplete && !_this4.failed) {
+                return 'Are you sure you want to leave?';
+            }
+        };
     }
 });
 
