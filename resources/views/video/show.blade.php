@@ -37,7 +37,7 @@
                         <div class="media">
                             <div class="mr-3">
                                 <a href="/channel/{{ $video->channel->slug }}">
-                                    <img src="{{ $video->channel->getImage() }}" alt="{{ $video->channel->name }} avatar" class="img-thumbnail img-fluid">
+                                    <img src="{{ $video->channel->getImage() }}" alt="{{ $video->channel->name }} avatar" class="img-fluid" style="max-width: 200px">
                                 </a>
                             </div>
                             <div class="media-body">
