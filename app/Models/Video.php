@@ -75,4 +75,8 @@ class Video extends Model
 
         return true;
     }
+
+    public function getStreamUrl() {
+        return config('vew.buckets.videos') . '/' . $this->video_id . '.mp4';
+    }
 }

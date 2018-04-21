@@ -13,6 +13,7 @@ window.Vue = require('vue');
  */
 
 Vue.component('video-upload', require('./components/VideoUpload.vue'));
+Vue.component('video-player', require('./components/VideoPlayer.vue'));
 const app = new Vue({
     el: '#app',
     data: window.vew
