@@ -11,7 +11,7 @@
                 @endif
 
                 @if($video->isProcessed() && $video->accessAllowed(\Illuminate\Support\Facades\Auth::user()))
-                    Video Player
+                    <video-player video-uid="{{ $video->uid }}" video-url="{{ $video->getStreamUrl() }}" thumbnail-url="{{ $video->getThumbnail() }}"></video-player>
                 @endif
 
                     @if(!$video->isProcessed())
@@ -37,7 +37,7 @@
                         <div class="media">
                             <div class="mr-3">
                                 <a href="/channel/{{ $video->channel->slug }}">
-                                    <img src="{{ $video->channel->getImage() }}" alt="{{ $video->channel->name }} avatar">
+                                    <img src="{{ $video->channel->getImage() }}" alt="{{ $video->channel->name }} avatar" class="img-thumbnail img-fluid">
                                 </a>
                             </div>
                             <div class="media-body">
