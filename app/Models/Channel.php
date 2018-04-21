@@ -36,7 +36,7 @@ class Channel extends Model
 
     public function getImage() {
         if (!$this->avatar_filename) {
-            return config('vew.buckets.images') . '/profile/default.png';
+            return config('vew.buckets.images') . '/profile/default_avatar.png';
         }
         return config('vew.buckets.images') . '/profile' . $this->avatar_filname;
     }
