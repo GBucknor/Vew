@@ -16,6 +16,7 @@ Route::get('/', function () {
 });
 
 Route::post('/webhook/encoding', 'EncodingWebhookController@handle');
+Route::get('/videos/{video}', 'VideoController@show');
 
 Route::group(['middleware' => ['auth']], function() {
     Route::get('/upload', 'VideoUploadController@index');

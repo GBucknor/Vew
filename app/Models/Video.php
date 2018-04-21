@@ -57,4 +57,22 @@ class Video extends Model
     public function commentsAllowed() {
         return (bool) $this->comments;
     }
+
+    public function isPrivate() {
+        return $this->access === 'private';
+    }
+
+    public function ownedByUser(User $user) {
+        return $this->channel->user->id === $user->id;
+    }
+
+    public function accessAllowed(User $user = null) {
+        if (!$user && $this->isPrivate())
+            return false;
+
+        if ($user && $this->isPrivate() && ($user->id !== $this->channel->user_id))
+            return false;
+
+        return true;
+    }
 }
